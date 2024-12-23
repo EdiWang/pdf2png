@@ -12,82 +12,49 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js"></script>
+    <style>
+        #canvasContainer {
+            min-height: 400px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-height: calc(100vh - 160px);
+            overflow-y: scroll;
+        }
+
+        #pageSelection {
+            max-height: calc(100vh - 200px);
+            overflow-y: scroll;
+        }
+
+        canvas {
+            border: 1px solid #CCC;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h2 class="text-center">PDF to PNG Converter</h2>
-        <div class="text-center mt-4">
-            <label for="formFile" class="form-label">Choose PDF File</label>
-            <input class="form-control" type="file" id="fileInput" accept="application/pdf" class="form-control-file">
+    <div class="container-fluid">
+        <h2 class="mt-3 mb-3">PDF to PNG Converter</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div>
+                    <input class="form-control" type="file" id="fileInput" accept="application/pdf">
+                </div>
+                <div id="pageSelection" class="border rounded mt-3 p-2">
+                    0 Pages Loaded
+                </div>
+                <button id="exportButton" class="btn btn-primary mt-3" disabled>Export Selected Pages</button>
+            </div>
+            <div class="col-md-9">
+                <div id="canvasContainer"></div>
+                <div id="downloadLinks" class="mt-4 mb-4"></div>
+            </div>
         </div>
-        <canvas id="pdfCanvas" class="mt-4 mx-auto d-block border" style="display: none;"></canvas>
-        <div id="downloadLink" class="text-center mt-4 mb-4"></div>
     </div>
 
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js';
-
-        document.getElementById('fileInput').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (!file || file.type !== 'application/pdf') {
-                alert('Please upload a valid PDF file.');
-                return;
-            }
-
-            // 获取文件名并替换扩展名为 .png
-            const fileName = file.name.replace(/\.pdf$/i, '.png');
-
-            const fileReader = new FileReader();
-
-            fileReader.onload = function () {
-                const typedarray = new Uint8Array(this.result);
-
-                pdfjsLib.getDocument({
-                    data: typedarray,
-                    cMapUrl: './cmaps/',
-                    cMapPacked: true
-                }).promise.then(pdf => {
-
-                    // 只渲染第一页
-                    pdf.getPage(1).then(page => {
-                        const scale = 1.5;
-                        const viewport = page.getViewport({ scale });
-
-                        // 获取 canvas 和其上下文
-                        const canvas = document.getElementById('pdfCanvas');
-                        const context = canvas.getContext('2d');
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
-
-                        const renderContext = {
-                            canvasContext: context,
-                            viewport: viewport
-                        };
-
-                        // 渲染 PDF 页面到 canvas
-                        page.render(renderContext).promise.then(() => {
-                            // 将 canvas 转换为 PNG 图片
-                            const imageData = canvas.toDataURL('image/png');
-                            const link = document.createElement('a');
-                            link.href = imageData;
-                            link.download = fileName;
-                            link.className = 'btn btn-primary';
-                            link.textContent = 'Download PNG';
-                            document.getElementById('downloadLink').innerHTML = '';
-                            document.getElementById('downloadLink').appendChild(link);
-                            canvas.style.display = 'block';
-                        });
-                    });
-                }).catch(error => {
-                    console.error('Error loading PDF:', error);
-                    alert('Failed to load PDF. Please try again.');
-                });
-            };
-
-            fileReader.readAsArrayBuffer(file);
-        });
-    </script>
+    <script src="app.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>
