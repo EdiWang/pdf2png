@@ -10,7 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+    <!-- 最新版 pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js"></script>
 </head>
 
 <body>
@@ -25,22 +27,29 @@
     </div>
 
     <script>
+        // 设置 pdf.worker.js 的路径
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js';
+
         document.getElementById('fileInput').addEventListener('change', function (event) {
             const file = event.target.files[0];
-            if (file.type !== 'application/pdf') {
-                alert('Please upload a PDF file.');
+            if (!file || file.type !== 'application/pdf') {
+                alert('Please upload a valid PDF file.');
                 return;
             }
 
             const fileReader = new FileReader();
+
             fileReader.onload = function () {
                 const typedarray = new Uint8Array(this.result);
 
+                // 加载 PDF 文档
                 pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+                    // 只渲染第一页
                     pdf.getPage(1).then(page => {
-                        const scale = 1.5;
-                        const viewport = page.getViewport({ scale: scale });
+                        const scale = 1.5; // 缩放比例
+                        const viewport = page.getViewport({ scale });
 
+                        // 获取 canvas 和其上下文
                         const canvas = document.getElementById('pdfCanvas');
                         const context = canvas.getContext('2d');
                         canvas.height = viewport.height;
@@ -51,7 +60,9 @@
                             viewport: viewport
                         };
 
+                        // 渲染 PDF 页面到 canvas
                         page.render(renderContext).promise.then(() => {
+                            // 将 canvas 转换为 PNG 图片
                             const imageData = canvas.toDataURL('image/png');
                             const link = document.createElement('a');
                             link.href = imageData;
@@ -63,8 +74,12 @@
                             canvas.style.display = 'block';
                         });
                     });
+                }).catch(error => {
+                    console.error('Error loading PDF:', error);
+                    alert('Failed to load PDF. Please try again.');
                 });
             };
+
             fileReader.readAsArrayBuffer(file);
         });
     </script>
