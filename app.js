@@ -89,13 +89,14 @@ exportButton.addEventListener('click', function () {
 // Render a specific page to PNG and create a download link
 function renderPageToPNG(pageNumber) {
     pdfDoc.getPage(pageNumber).then(page => {
-        const scale = 1.5;
+        const scale = 1.0;
         const viewport = page.getViewport({ scale });
 
         // Create a new canvas for each page
         const canvas = document.createElement('canvas');
         canvas.width = viewport.width;
         canvas.height = viewport.height;
+        canvas.className = 'border shadow-sm';
         canvasContainer.appendChild(canvas);
 
         const context = canvas.getContext('2d');
