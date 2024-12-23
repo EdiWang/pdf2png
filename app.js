@@ -89,7 +89,7 @@ exportButton.addEventListener('click', function () {
 // Render a specific page to PNG and create a download link
 function renderPageToPNG(pageNumber) {
     pdfDoc.getPage(pageNumber).then(page => {
-        const scale = 1.0;
+        const scale = 1.5;
         const viewport = page.getViewport({ scale });
 
         // Create a new canvas for each page

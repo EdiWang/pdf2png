@@ -15,7 +15,6 @@
     <style>
         #canvasContainer {
             min-height: 400px;
-            display: flex;
             gap: 10px;
             flex-wrap: wrap;
             max-height: calc(100vh - 160px);
@@ -43,7 +42,7 @@
                 <button id="exportButton" class="btn btn-primary mt-3" disabled>Export Selected Pages</button>
             </div>
             <div class="col-md-9">
-                <div id="canvasContainer"></div>
+                <div id="canvasContainer" class="d-flex"></div>
                 <div id="downloadLinks" class="my-3"></div>
             </div>
         </div>
