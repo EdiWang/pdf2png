@@ -9,6 +9,17 @@ const canvasContainer = document.getElementById('canvasContainer');
 let pdfDoc = null; // Store the loaded PDF document
 let fileName = null;
 
+let allSelected = false;
+selectAllButton.addEventListener('click', function () {
+    const checkboxes = pageSelection.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = !allSelected;
+    });
+
+    allSelected = !allSelected;
+    selectAllButton.textContent = allSelected ? 'Deselect All' : 'Select All';
+});
+
 function getSelectedScale() {
     const selectedScale = document.querySelector('input[name="scale"]:checked');
     return selectedScale ? parseFloat(selectedScale.value) : 1.5;
