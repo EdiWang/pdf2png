@@ -9,6 +9,11 @@ const canvasContainer = document.getElementById('canvasContainer');
 let pdfDoc = null; // Store the loaded PDF document
 let fileName = null;
 
+function getSelectedScale() {
+    const selectedScale = document.querySelector('input[name="scale"]:checked');
+    return selectedScale ? parseFloat(selectedScale.value) : 1.5;
+}
+
 fileInput.addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (!file || file.type !== 'application/pdf') {
@@ -81,15 +86,17 @@ exportButton.addEventListener('click', function () {
     downloadLinks.innerHTML = ''; // Clear previous download links
     canvasContainer.innerHTML = ''; // Clear previous canvases
 
+    const scale = getSelectedScale();
+    console.info('Exporting pages:', selectedPages, 'with scale:', scale);
+
     selectedPages.forEach(pageNumber => {
-        renderPageToPNG(pageNumber);
+        renderPageToPNG(pageNumber, scale);
     });
 });
 
 // Render a specific page to PNG and create a download link
-function renderPageToPNG(pageNumber) {
+function renderPageToPNG(pageNumber, scale) {
     pdfDoc.getPage(pageNumber).then(page => {
-        const scale = 1.5;
         const viewport = page.getViewport({ scale });
 
         // Create a new canvas for each page

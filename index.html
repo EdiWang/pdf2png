@@ -22,7 +22,7 @@
         }
 
         #pageSelection {
-            max-height: calc(100vh - 200px);
+            max-height: calc(100vh - 325px);
             overflow-y: scroll;
         }
     </style>
@@ -39,6 +39,23 @@
                 <div id="pageSelection" class="border rounded mt-3 p-2">
                     0 Pages Loaded
                 </div>
+
+                <div class="mt-3">
+                    <label class="form-label">Select Scale:</label>
+                    <div id="scaleSelection" class="form-check">
+                        <input type="radio" class="form-check-input" name="scale" id="scale-1" value="1.0">
+                        <label class="form-check-label" for="scale-1">1.0</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="scale" id="scale-1-5" value="1.5" checked>
+                        <label class="form-check-label" for="scale-1-5">1.5</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="scale" id="scale-2" value="2.0">
+                        <label class="form-check-label" for="scale-2">2.0</label>
+                    </div>
+                </div>
+
                 <button id="exportButton" class="btn btn-primary mt-3" disabled>Export Selected Pages</button>
             </div>
             <div class="col-md-9">
