@@ -64,7 +64,6 @@ function generatePageSelection(numPages) {
         checkbox.value = i;
         checkbox.className = 'form-check-input me-2';
 
-        // 默认选中第一页
         if (i === 1) {
             checkbox.checked = true;
         }
