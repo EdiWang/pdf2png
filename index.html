@@ -35,6 +35,9 @@
                 return;
             }
 
+            // 获取文件名并替换扩展名为 .png
+            const fileName = file.name.replace(/\.pdf$/i, '.png');
+
             const fileReader = new FileReader();
 
             fileReader.onload = function () {
@@ -68,7 +71,7 @@
                             const imageData = canvas.toDataURL('image/png');
                             const link = document.createElement('a');
                             link.href = imageData;
-                            link.download = 'page.png';
+                            link.download = fileName;
                             link.className = 'btn btn-primary';
                             link.textContent = 'Download PNG';
                             document.getElementById('downloadLink').innerHTML = '';
