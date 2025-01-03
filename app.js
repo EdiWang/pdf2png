@@ -47,6 +47,9 @@ fileInput.addEventListener('change', function (event) {
         }).promise.then(pdf => {
             pdfDoc = pdf;
             generatePageSelection(pdf.numPages);
+
+            downloadLinks.innerHTML = ''; // Clear previous download links
+            canvasContainer.innerHTML = ''; // Clear previous canvases
         }).catch(error => {
             console.error('Error loading PDF:', error);
             alert('Failed to load PDF. Please try again.');
