@@ -17,6 +17,7 @@
     <script src="/lib/bootstrap/bootstrap.bundle.min.js"></script>
 
     <script type="module" src="/lib/pdfjs/pdf.mjs"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css" />
     <style>
@@ -87,6 +88,8 @@
             </div>
             <div class="col-md-9 col-lg-10">
                 <div id="canvasContainer" class="d-flex"></div>
+
+                <button id="downloadAllBtn" class="btn btn-outline-primary mt-3" style="display: none;">Download All Pages</button>
             </div>
         </div>
     </div>

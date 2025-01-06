@@ -6,6 +6,7 @@ const fileInput = document.getElementById('fileInput');
 const pageSelection = document.getElementById('pageSelection');
 const exportButton = document.getElementById('exportButton');
 const canvasContainer = document.getElementById('canvasContainer');
+const allPagesData = [];
 
 let pdfDoc = null; // Store the loaded PDF document
 let fileName = null;
@@ -132,6 +133,12 @@ function renderPageToPNG(pageNumber, scale) {
         page.render(renderContext).promise.then(() => {
             const imageData = canvas.toDataURL('image/png');
 
+            // Store the image data for "Download All" functionality
+            allPagesData.push({
+                pageNumber: pageNumber,
+                imageData: imageData
+            });
+
             // Create a download link for the canvas image
             const link = document.createElement('a');
             link.href = imageData;
@@ -139,9 +146,37 @@ function renderPageToPNG(pageNumber, scale) {
             link.className = 'btn btn-outline-secondary btn-download-link d-block mt-2';
             link.textContent = `Download Page ${pageNumber}`;
             pageContainer.appendChild(link);
+
+            // Show the "Download All" button when all pages are rendered
+            if (allPagesData.length > 0) {
+                document.getElementById('downloadAllBtn').style.display = 'block';
+            }
         });
     }).catch(error => {
         console.error(`Error rendering page ${pageNumber}:`, error);
         alert(`Failed to render page ${pageNumber}.`);
     });
 }
+
+// Function to download all pages as a ZIP file
+function downloadAllPages() {
+    const zip = new JSZip();
+    const imgFolder = zip.folder('images'); // Create a folder for images in the ZIP
+
+    // Add each page's image to the ZIP
+    allPagesData.forEach(({ pageNumber, imageData }) => {
+        const base64Data = imageData.split(',')[1]; // Remove the "data:image/png;base64," prefix
+        imgFolder.file(`page-${pageNumber}.png`, base64Data, { base64: true });
+    });
+
+    // Generate the ZIP file and trigger the download
+    zip.generateAsync({ type: 'blob' }).then(content => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(content);
+        a.download = `${fileName}-all-pages.zip`;
+        a.click();
+    });
+}
+
+// Attach the "Download All" functionality to the button
+document.getElementById('downloadAllBtn').addEventListener('click', downloadAllPages);
