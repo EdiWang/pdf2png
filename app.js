@@ -83,7 +83,7 @@ function generatePageSelection(numPages) {
 
         pageSelection.appendChild(div);
     }
-    exportButton.disabled = false; // Enable the export button
+    exportButton.disabled = false;
 }
 
 // Export selected pages as PNG
@@ -96,7 +96,7 @@ exportButton.addEventListener('click', function () {
         return;
     }
 
-    canvasContainer.innerHTML = ''; // Clear previous canvases
+    canvasContainer.innerHTML = '';
 
     const scale = getSelectedScale();
     console.info('Exporting pages:', selectedPages, 'with scale:', scale);
@@ -113,7 +113,7 @@ function renderPageToPNG(pageNumber, scale) {
 
         // Create a container for the canvas and its download link
         const pageContainer = document.createElement('div');
-        pageContainer.className = 'page-container'; // Add some margin between pages
+        pageContainer.className = 'page-container';
         canvasContainer.appendChild(pageContainer);
 
         // Create a new canvas for the page
@@ -136,9 +136,9 @@ function renderPageToPNG(pageNumber, scale) {
             const link = document.createElement('a');
             link.href = imageData;
             link.download = `${fileName}-page-${pageNumber}.png`;
-            link.className = 'btn btn-outline-secondary btn-download-link d-block mt-2'; // Add spacing above the link
+            link.className = 'btn btn-outline-secondary btn-download-link d-block mt-2';
             link.textContent = `Download Page ${pageNumber}`;
-            pageContainer.appendChild(link); // Append the link below the canvas
+            pageContainer.appendChild(link);
         });
     }).catch(error => {
         console.error(`Error rendering page ${pageNumber}:`, error);
