@@ -5,7 +5,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/lib/pdfjs/pdf.worker.mjs';
 const fileInput = document.getElementById('fileInput');
 const pageSelection = document.getElementById('pageSelection');
 const exportButton = document.getElementById('exportButton');
-const downloadLinks = document.getElementById('downloadLinks');
 const canvasContainer = document.getElementById('canvasContainer');
 
 let pdfDoc = null; // Store the loaded PDF document
@@ -48,7 +47,6 @@ fileInput.addEventListener('change', function (event) {
             pdfDoc = pdf;
             generatePageSelection(pdf.numPages);
 
-            downloadLinks.innerHTML = ''; // Clear previous download links
             canvasContainer.innerHTML = ''; // Clear previous canvases
         }).catch(error => {
             console.error('Error loading PDF:', error);
@@ -98,7 +96,6 @@ exportButton.addEventListener('click', function () {
         return;
     }
 
-    downloadLinks.innerHTML = ''; // Clear previous download links
     canvasContainer.innerHTML = ''; // Clear previous canvases
 
     const scale = getSelectedScale();
@@ -114,12 +111,17 @@ function renderPageToPNG(pageNumber, scale) {
     pdfDoc.getPage(pageNumber).then(page => {
         const viewport = page.getViewport({ scale });
 
-        // Create a new canvas for each page
+        // Create a container for the canvas and its download link
+        const pageContainer = document.createElement('div');
+        pageContainer.className = 'page-container'; // Add some margin between pages
+        canvasContainer.appendChild(pageContainer);
+
+        // Create a new canvas for the page
         const canvas = document.createElement('canvas');
         canvas.width = viewport.width;
         canvas.height = viewport.height;
         canvas.className = 'border shadow-sm';
-        canvasContainer.appendChild(canvas);
+        pageContainer.appendChild(canvas);
 
         const context = canvas.getContext('2d');
         const renderContext = {
@@ -129,12 +131,14 @@ function renderPageToPNG(pageNumber, scale) {
 
         page.render(renderContext).promise.then(() => {
             const imageData = canvas.toDataURL('image/png');
+
+            // Create a download link for the canvas image
             const link = document.createElement('a');
             link.href = imageData;
             link.download = `${fileName}-page-${pageNumber}.png`;
-            link.className = 'btn btn-success me-2 mb-2';
+            link.className = 'btn btn-outline-secondary btn-download-link d-block mt-2'; // Add spacing above the link
             link.textContent = `Download Page ${pageNumber}`;
-            downloadLinks.appendChild(link);
+            pageContainer.appendChild(link); // Append the link below the canvas
         });
     }).catch(error => {
         console.error(`Error rendering page ${pageNumber}:`, error);
