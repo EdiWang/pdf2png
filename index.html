@@ -34,7 +34,7 @@
         }
 
         #pageSelection {
-            max-height: calc(100vh - 350px);
+            max-height: calc(100vh - 390px);
             overflow-y: scroll;
         }
     </style>
@@ -54,32 +54,36 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <div>
-                    <input class="form-control" type="file" id="fileInput" accept="application/pdf">
-                </div>
-
-                <div id="pageSelection" class="border rounded mt-3 mb-1 p-2">
-                    0 Pages Loaded
-                </div>
-                <button id="selectAllButton" class="btn btn-sm btn-outline-secondary">Select All</button>
-
-                <div class="mt-3">
-                    <label class="form-label">Select Scale:</label>
-                    <div id="scaleSelection" class="form-check">
-                        <input type="radio" class="form-check-input" name="scale" id="scale-1" value="1.0">
-                        <label class="form-check-label" for="scale-1">1.0</label>
+                <aside class="aside-tools">
+                    <div>
+                        <input class="form-control" type="file" id="fileInput" accept="application/pdf">
                     </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="scale" id="scale-1-5" value="1.5" checked>
-                        <label class="form-check-label" for="scale-1-5">1.5</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="scale" id="scale-2" value="2.0">
-                        <label class="form-check-label" for="scale-2">2.0</label>
-                    </div>
-                </div>
 
-                <button id="exportButton" class="btn btn-primary mt-3" disabled>Export Selected Pages</button>
+                    <div id="pageSelection" class="border rounded mt-3 mb-1 p-2">
+                        <small class="text-muted">0 Pages Loaded</small>
+                    </div>
+                    <button id="selectAllButton" class="btn btn-sm btn-outline-secondary">Select All</button>
+
+                    <div class="mt-3">
+                        <label class="form-label">Select Scale:</label>
+                        <div id="scaleSelection" class="form-check">
+                            <input type="radio" class="form-check-input" name="scale" id="scale-1" value="1.0">
+                            <label class="form-check-label" for="scale-1">1.0</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="scale" id="scale-1-5" value="1.5"
+                                checked>
+                            <label class="form-check-label" for="scale-1-5">1.5</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="scale" id="scale-2" value="2.0">
+                            <label class="form-check-label" for="scale-2">2.0</label>
+                        </div>
+                    </div>
+
+                    <button id="exportButton" class="btn btn-outline-primary w-100 mt-3" disabled>Export Selected
+                        Pages</button>
+                </aside>
             </div>
             <div class="col-md-9">
                 <div id="canvasContainer" class="d-flex"></div>
