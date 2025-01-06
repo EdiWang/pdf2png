@@ -6,6 +6,7 @@ const fileInput = document.getElementById('fileInput');
 const pageSelection = document.getElementById('pageSelection');
 const exportButton = document.getElementById('exportButton');
 const canvasContainer = document.getElementById('canvasContainer');
+const downloadAllButton = document.getElementById('downloadAllBtn');
 const allPagesData = [];
 
 let pdfDoc = null; // Store the loaded PDF document
@@ -98,6 +99,8 @@ exportButton.addEventListener('click', function () {
     }
 
     canvasContainer.innerHTML = '';
+    allPagesData.length = 0; // Clear previous page data
+    downloadAllButton.style.display = 'none';
 
     const scale = getSelectedScale();
     console.info('Exporting pages:', selectedPages, 'with scale:', scale);
@@ -148,8 +151,11 @@ function renderPageToPNG(pageNumber, scale) {
             pageContainer.appendChild(link);
 
             // Show the "Download All" button when all pages are rendered
-            if (allPagesData.length > 0) {
-                document.getElementById('downloadAllBtn').style.display = 'block';
+            if (allPagesData.length > 1) {
+                downloadAllButton.style.display = 'block';
+            }
+            else {
+                downloadAllButton.style.display = 'none';
             }
         });
     }).catch(error => {
@@ -179,4 +185,4 @@ function downloadAllPages() {
 }
 
 // Attach the "Download All" functionality to the button
-document.getElementById('downloadAllBtn').addEventListener('click', downloadAllPages);
+downloadAllButton.addEventListener('click', downloadAllPages);
